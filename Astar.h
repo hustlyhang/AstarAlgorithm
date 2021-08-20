@@ -6,6 +6,15 @@
 const int diagonalCost = 14;
 const int axialCost = 10;
 
+struct SPairHash {
+	template <class T1, class T2>
+	size_t operator ()(std::pair<T1, T2> const& pair) const {
+		size_t h1 = std::hash<T1>()(pair.first);
+		size_t h2 = std::hash<T2>()(pair.second);
+		return h1 ^ h2;
+	}
+};
+
 class CGraph {
 public:
 	CGraph(std::vector<std::vector<int>>& _data) :m_vData(_data) {
@@ -128,6 +137,6 @@ private:
 	// 未访问过的点
 	std::priority_queue<Node*> m_qOpenPos;
 	// 访问过或者是障碍的位置
-	std::unordered_set<std::pair<int, int>> m_sClosePos;
-	std::unordered_set<std::pair<int, int>> m_sOpenPos;
+	std::unordered_set<std::pair<int, int>, SPairHash> m_sClosePos;
+	std::unordered_set<std::pair<int, int>, SPairHash> m_sOpenPos;
 };
